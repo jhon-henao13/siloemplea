@@ -1,6 +1,9 @@
-export default function JobCard({ job }) {
+export default function JobCard({ job, onViewDetails }) {
   return (
-    <div className="bg-surface rounded-xl border border-slate-100 shadow-card p-5 flex flex-col justify-between hover:border-accent-dark transition-all duration-300">
+    <div 
+        onClick={onViewDetails}
+        className="bg-surface rounded-xl border border-slate-100 shadow-card p-5 flex flex-col justify-between hover:border-accent-dark transition-all duration-300"
+    >
       <div>
         {/* Header de la Tarjeta */}
         <div className="flex justify-between items-start gap-2 mb-3">
@@ -57,6 +60,7 @@ export default function JobCard({ job }) {
         href={job.whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
         className="w-full flex items-center justify-center bg-accent hover:bg-accent-hover text-primary font-bold py-3 px-4 rounded-xl transition-all duration-200 gap-2 text-sm shadow-sm active:scale-95"
       >
         Postularme por WhatsApp

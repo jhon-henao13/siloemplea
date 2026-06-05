@@ -7,34 +7,61 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Blanco predominante implícito en clases como bg-white
         surface: {
           DEFAULT: '#FFFFFF',
-          50: '#F8FAFC', // Gris súper sutil para diferenciar secciones sin romper la limpieza
+          // Reemplazamos el gris Slate por el fondo premium extraído de tu logo (azul súper sutil)
+          50: '#f2fafb', 
+          // Tonos secundarios suaves para bordes o fondos alternos basados en tu paleta
+          100: '#c1e7ec',
+          200: '#95cdd1',
         },
         primary: {
-          // Azul Oscuro: Profesionalismo, textos principales, headers
-          DEFAULT: '#0F172A', // Slate 900
-          light: '#1E293B',   // Slate 800 para hover
+          // Tu azul oscuro del logo: Da profesionalismo y fuerza visual
+          DEFAULT: '#115c7f', 
+          // Una variante más oscura del mismo tono para hovers o textos ultra-importantes
+          dark: '#0a3d55',   
         },
         accent: {
-          // Verde con tonalidad amarilla: Esperanza, energía local, botones de acción principal
-          DEFAULT: '#A3E635', // Lime 400 de Tailwind (Vibrante)
-          hover: '#84CC16',   // Lime 500 para interacciones
-          dark: '#65A30D',    // Lime 600 para bordes o textos sobre fondos claros
+          // El verde con tonalidad amarilla sutil extraído del logo
+          DEFAULT: '#93d334', 
+          // El verde más vivo de tu paleta para interacciones/hovers exitosos
+          hover: '#50c76a',   
+          // Tonos claros de tu paleta ideales para fondos de alertas o contenedores suaves
+          light: '#c3e99d',
+          soft: '#def8ca',
         },
         text: {
-          main: '#0F172A',    // Para títulos
-          muted: '#64748B',   // Para descripciones y textos secundarios (Slate 500)
+          // El color principal de lectura ahora hereda la sobriedad de tu azul de marca
+          main: '#115c7f',    
+          // Un gris azulado intermedio para descripciones secundarias
+          muted: '#527a8c',   
         }
       },
       fontFamily: {
-        // Te sugiero Inter para una lectura óptima en móviles (UI Premium)
         sans: ['Inter', 'system-ui', 'sans-serif'], 
       },
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'slide-up': {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        'slide-in': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        }
+      },
+      animation: {
+        // Corregido: Se cambió 'ease-out-quad' por 'ease-out' ya que Tailwind nativo no incluye -quad por defecto en strings directos de animación
+        'fade-in': 'fade-in 0.2s ease-out forwards',
+        'slide-up': 'slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'slide-in': 'slide-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+      },
       boxShadow: {
-        // Sombras suaves para tarjetas, dando aspecto de app moderna
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+        'card': '0 4px 6px -1px rgba(17, 92, 127, 0.04), 0 2px 4px -1px rgba(17, 92, 127, 0.02)',
       }
     },
   },

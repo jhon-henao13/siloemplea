@@ -4,17 +4,33 @@ import Hero from './components/ui/Hero';
 import CategoryFilters from './components/ui/CategoryFilters';
 import JobCard from './components/ui/JobCard';
 import PublishJobModal from './components/ui/PublishJobModal';
+import JobDetailBottomSheet from './components/ui/JobDetailBottomSheet'; // Nuevo
 import Footer from './components/layout/Footer';
 import { MOCK_JOBS, CATEGORIES } from './utils/mockData';
+import ReloadPrompt from './components/layout/ReloadPrompt';
 
 function App() {
   const [jobs, setJobs] = useState(MOCK_JOBS);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Estados para el flujo de Detalle Premium
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
-  // Manejar inserción de nuevas vacantes desde el formulario local
   const handlePublishJob = (newJob) => {
     setJobs((prevJobs) => [newJob, ...prevJobs]);
+  };
+
+  const handleOpenDetails = (job) => {
+    setSelectedJob(job);
+    setIsBottomSheetOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setIsBottomSheetOpen(false);
+    // Esperamos a que la animación de salida termine antes de limpiar el objeto del estado
+    setTimeout(() => setSelectedJob(null), 300); 
   };
 
   const filteredJobs = selectedCategory === 'Todos'
@@ -23,11 +39,9 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-surface-50">
-      {/* Pasamos la función para abrir el modal al Navbar */}
       <Navbar onPublishClick={() => setIsModalOpen(true)} />
       
       <main className="flex-grow">
-        {/* Pasamos la función para abrir el modal al Hero (Botón: Soy un negocio) */}
         <Hero onBusinessClick={() => setIsModalOpen(true)} />
         
         <CategoryFilters 
@@ -40,7 +54,11 @@ function App() {
           {filteredJobs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredJobs.map((job) => (
-                <JobCard key={job.id} job={job} />
+                <JobCard 
+                  key={job.id} 
+                  job={job} 
+                  onViewDetails={handleOpenDetails} // Pasamos la acción
+                />
               ))}
             </div>
           ) : (
@@ -53,12 +71,22 @@ function App() {
 
       <Footer />
 
-      {/* Trigger de Capa de Formulario */}
       <PublishJobModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onPublish={handlePublishJob}
       />
+
+      {/* Renderizado de la Hoja de Detalles Expandida */}
+      {selectedJob && (
+        <JobDetailBottomSheet 
+          job={selectedJob}
+          isOpen={isBottomSheetOpen}
+          onClose={handleCloseDetails}
+        />
+      )}
+      
+      <ReloadPrompt />
     </div>
   );
 }
