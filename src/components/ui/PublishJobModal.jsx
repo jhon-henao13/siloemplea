@@ -204,6 +204,24 @@ export default function PublishJobModal({ isOpen, onClose, onPublish }) {
             </div>
           )}
 
+
+          <div className="border-t border-slate-100 pt-4">
+                <label className="block text-sm font-bold text-primary mb-2">Selecciona el Plan de Destacado</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className={`border rounded-xl p-3 flex flex-col cursor-pointer ${!formData.isPremiumPlan ? 'border-primary bg-slate-50' : 'border-slate-200'}`}>
+                    <input type="radio" name="isPremiumPlan" checked={!formData.isPremiumPlan} onChange={() => setFormData(p => ({...p, isPremiumPlan: false}))} className="sr-only" />
+                    <span className="text-xs font-bold text-primary">Plan Comunitario</span>
+                    <span className="text-[10px] text-text-muted mt-0.5">Gratis • Solo lista estándar</span>
+                  </label>
+                  <label className={`border rounded-xl p-3 flex flex-col cursor-pointer ${formData.isPremiumPlan ? 'border-amber-500 bg-amber-50/40' : 'border-slate-200'}`}>
+                    <input type="radio" name="isPremiumPlan" checked={formData.isPremiumPlan} onChange={() => setFormData(p => ({...p, isPremiumPlan: true}))} className="sr-only" />
+                    <span className="text-xs font-bold text-amber-600 flex items-center gap-1">★ Plan Negocio Local</span>
+                    <span className="text-[10px] text-amber-700 mt-0.5">Ubicación exacta en Mapa interactivo</span>
+                  </label>
+                </div>
+              </div>
+
+
           {/* Botones de Navegación del Formulario */}
           <div className="flex gap-3 mt-8 pt-4 border-t border-slate-100">
             {step > 1 && (

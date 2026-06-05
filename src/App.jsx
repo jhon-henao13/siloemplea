@@ -4,7 +4,10 @@ import Hero from './components/ui/Hero';
 import CategoryFilters from './components/ui/CategoryFilters';
 import JobCard from './components/ui/JobCard';
 import PublishJobModal from './components/ui/PublishJobModal';
-import JobDetailBottomSheet from './components/ui/JobDetailBottomSheet'; // Nuevo
+import JobDetailBottomSheet from './components/ui/JobDetailBottomSheet';
+import AuthModal from './components/ui/AuthModal';
+import UserProfileModal from './components/ui/UserProfileModal';
+import MapPremiumModal from './components/ui/MapPremiumModal';
 import Footer from './components/layout/Footer';
 import { MOCK_JOBS, CATEGORIES } from './utils/mockData';
 import ReloadPrompt from './components/layout/ReloadPrompt';
@@ -12,9 +15,15 @@ import ReloadPrompt from './components/layout/ReloadPrompt';
 function App() {
   const [jobs, setJobs] = useState(MOCK_JOBS);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   
-  // Estados para el flujo de Detalle Premium
+  // Control de Capas de Modales Globales
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  
+  // Control de Estados Cruzados de Sesión
+  const [user, setUser] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
@@ -29,8 +38,20 @@ function App() {
 
   const handleCloseDetails = () => {
     setIsBottomSheetOpen(false);
-    // Esperamos a que la animación de salida termine antes de limpiar el objeto del estado
     setTimeout(() => setSelectedJob(null), 300); 
+  };
+
+  // Interceptación de flujo condicional con enfoque de conversión premium
+  const handleSearchJobClick = () => {
+    if (!user) {
+      setIsAuthOpen(true);
+    } else {
+      setIsProfileOpen(true);
+    }
+  };
+
+  const handleUpgradeUser = () => {
+    setUser(prev => ({ ...prev, isPremium: true }));
   };
 
   const filteredJobs = selectedCategory === 'Todos'
@@ -39,10 +60,19 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-surface-50">
-      <Navbar onPublishClick={() => setIsModalOpen(true)} />
+      <Navbar 
+        onPublishClick={() => setIsModalOpen(true)} 
+        onAuthClick={() => setIsAuthOpen(true)}
+        onMapClick={() => setIsMapOpen(true)}
+        onProfileClick={() => setIsProfileOpen(true)}
+        user={user}
+      />
       
       <main className="flex-grow">
-        <Hero onBusinessClick={() => setIsModalOpen(true)} />
+        <Hero 
+          onBusinessClick={() => setIsModalOpen(true)} 
+          onSearchJobClick={handleSearchJobClick}
+        />
         
         <CategoryFilters 
           categories={CATEGORIES} 
@@ -57,7 +87,7 @@ function App() {
                 <JobCard 
                   key={job.id} 
                   job={job} 
-                  onViewDetails={handleOpenDetails} // Pasamos la acción
+                  onViewDetails={handleOpenDetails}
                 />
               ))}
             </div>
@@ -77,7 +107,24 @@ function App() {
         onPublish={handlePublishJob}
       />
 
-      {/* Renderizado de la Hoja de Detalles Expandida */}
+      <AuthModal 
+        isOpen={isAuthOpen} 
+        onClose={() => setIsAuthOpen(false)} 
+        onAuthSuccess={(userData) => setUser(userData)}
+      />
+
+      <UserProfileModal 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+        user={user}
+        onUpgradeToPremium={handleUpgradeUser}
+      />
+
+      <MapPremiumModal 
+        isOpen={isMapOpen} 
+        onClose={() => setIsMapOpen(false)}
+      />
+
       {selectedJob && (
         <JobDetailBottomSheet 
           job={selectedJob}

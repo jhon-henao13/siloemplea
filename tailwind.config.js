@@ -41,6 +41,15 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'], 
       },
       keyframes: {
+
+        'shimmer': {
+          '100%': { transform: 'translateX(100%)' }
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+
         'fade-in': {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
@@ -56,6 +65,7 @@ export default {
       },
       animation: {
         // Corregido: Se cambió 'ease-out-quad' por 'ease-out' ya que Tailwind nativo no incluye -quad por defecto en strings directos de animación
+        'shimmer': 'shimmer 1.5s infinite',
         'fade-in': 'fade-in 0.2s ease-out forwards',
         'slide-up': 'slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'slide-in': 'slide-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
