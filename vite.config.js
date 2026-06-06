@@ -38,6 +38,7 @@ export default defineConfig({
       },
       workbox: {
         // Estrategia de caché para optimizar redes 3G/4G lentas
+        maximumFileSizeToCacheInBytes: 3145728, // 3MB
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
